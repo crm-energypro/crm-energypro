@@ -1,0 +1,2895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>EnergyPro CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #00AEEF;
+  --primary-dark: #0090CC;
+  --primary-light: #E0F5FD;
+  --secondary: #FF6B35;
+  --secondary-light: #FFF0EB;
+  --accent: #4CAF50;
+  --accent-light: #E8F5E9;
+  --bg: #F4F9FF;
+  --surface: #FFFFFF;
+  --surface2: #F0F7FF;
+  --text: #1A3A4A;
+  --text2: #5B7A8A;
+  --text3: #8FA8B5;
+  --border: #D6EAF8;
+  --shadow: rgba(0,174,239,0.10);
+  --shadow-md: rgba(0,174,239,0.18);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+
+  /* Estado colores */
+  --estado-factura: #F59E0B;
+  --estado-factura-bg: #FEF3C7;
+  --estado-propuesta: #3B82F6;
+  --estado-propuesta-bg: #DBEAFE;
+  --estado-ganado: #10B981;
+  --estado-ganado-bg: #D1FAE5;
+  --estado-perdido: #EF4444;
+  --estado-perdido-bg: #FEE2E2;
+  --estado-ahorro: #8B5CF6;
+  --estado-ahorro-bg: #EDE9FE;
+  --estado-comision: #EC4899;
+  --estado-comision-bg: #FCE7F3;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,h2,h3,h4 { font-family: 'Nunito', sans-serif; }
+
+/* ========== AUTH ========== */
+#auth-screen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #E0F5FD 0%, #FFF0EB 50%, #E8F5E9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px var(--shadow-md);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-logo .logo-icon {
+  width: 72px;
+  height: 72px;
+  background: #FF6B35;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 32px;
+}
+
+.auth-logo h1 {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.auth-logo h1 span { color: var(--primary); }
+.auth-logo p { color: var(--text2); font-size: 13px; margin-top: 4px; }
+
+.auth-tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+
+.auth-tab.active {
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(0,174,239,0.3);
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,174,239,0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  padding: 10px 18px;
+  background: var(--surface);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover { background: var(--primary-light); }
+
+.btn-danger {
+  padding: 8px 14px;
+  background: #FEE2E2;
+  color: #EF4444;
+  border: none;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover { background: #EF4444; color: white; }
+
+.btn-sm {
+  padding: 7px 14px;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-green { background: var(--accent-light); color: var(--accent); }
+.btn-green:hover { background: var(--accent); color: white; }
+
+.btn-orange { background: var(--secondary-light); color: var(--secondary); }
+.btn-orange:hover { background: var(--secondary); color: white; }
+
+.auth-error {
+  background: #FEE2E2;
+  color: #EF4444;
+  padding: 10px 14px;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+/* ========== LAYOUT ========== */
+#app { display: none; height: 100vh; overflow: hidden; }
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  width: 260px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo .logo-mark {
+  width: 40px;
+  height: 40px;
+  background: #FF6B35;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-logo .logo-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text);
+}
+.sidebar-logo .logo-text .energy { color: #00AEEF; font-weight: 700; }
+.sidebar-logo .logo-text .pro { color: #FF6B35; font-weight: 900; }
+
+.sidebar-user {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FF6B35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.user-role { font-size: 11px; color: var(--text2); }
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 12px;
+}
+
+.nav-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text3);
+  padding: 8px 8px 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--secondary);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-logout:hover { background: #FEE2E2; color: #EF4444; }
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.page-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.page-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.page-body { padding: 24px 28px; }
+
+/* ========== HAMBURGER ========== */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  font-size: 20px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 99;
+}
+
+/* ========== DASHBOARD ========== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 2px 12px var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow-md); }
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-family: 'Nunito', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  margin: 8px 0 4px;
+}
+
+.stat-sub { font-size: 12px; color: var(--text3); }
+
+.stat-card.primary { border-left: 4px solid var(--primary); }
+.stat-card.secondary { border-left: 4px solid var(--secondary); }
+.stat-card.accent { border-left: 4px solid var(--accent); }
+.stat-card.purple { border-left: 4px solid #8B5CF6; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 2px 12px var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ========== ESTADOS ========== */
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.estado-factura { background: var(--estado-factura-bg); color: var(--estado-factura); }
+.estado-propuesta { background: var(--estado-propuesta-bg); color: var(--estado-propuesta); }
+.estado-ganado { background: var(--estado-ganado-bg); color: var(--estado-ganado); }
+.estado-perdido { background: var(--estado-perdido-bg); color: var(--estado-perdido); }
+.estado-ahorro { background: var(--estado-ahorro-bg); color: var(--estado-ahorro); }
+.estado-comision { background: var(--estado-comision-bg); color: var(--estado-comision); }
+
+/* ========== CLIENTES TABLE ========== */
+.filters-bar {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px 10px 38px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.search-wrapper { position: relative; flex: 1; min-width: 200px; }
+.search-wrapper::before {
+  content: '🔍';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  z-index: 1;
+}
+
+.search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+.filter-select {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-select:focus { border-color: var(--primary); }
+
+.clients-table-wrap {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 12px var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.clients-table th {
+  background: var(--bg);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+}
+
+.clients-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.clients-table tr:last-child td { border-bottom: none; }
+.clients-table tbody tr { transition: background 0.15s; cursor: pointer; }
+.clients-table tbody tr:hover { background: var(--bg); }
+
+.client-name { font-weight: 600; color: var(--text); }
+.client-cups { font-size: 12px; color: var(--text2); font-family: monospace; margin-top: 2px; }
+
+.suministro-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sum-luz { background: #FEF3C7; color: #D97706; }
+.sum-gas { background: #FEE2E2; color: #DC2626; }
+.sum-ambos { background: #DBEAFE; color: #2563EB; }
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,58,74,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--surface);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.25s;
+}
+
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+.modal-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+
+.modal-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--text2);
+}
+
+.modal-close:hover { background: #FEE2E2; color: #EF4444; }
+
+.modal-body { padding: 24px 28px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-grid .full { grid-column: 1 / -1; }
+
+.section-divider {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary);
+  padding: 16px 0 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  grid-column: 1 / -1;
+}
+
+.modal-footer {
+  padding: 16px 28px 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ========== CLIENTE DETAIL ========== */
+.detail-modal { max-width: 800px; }
+
+.detail-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.detail-tab {
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.detail-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+.detail-section { display: none; }
+.detail-section.active { display: block; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.info-item label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text3);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.info-item span {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.ganado-section {
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  border: 1px solid #A7F3D0;
+  margin-bottom: 16px;
+}
+
+.ganado-section h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Estado selector visual */
+.estado-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.estado-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.45;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.estado-btn:hover { opacity: 0.75; transform: translateY(-1px); }
+
+.estado-btn.selected {
+  opacity: 1;
+  border-color: currentColor;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.estado-btn.ef  { background: var(--estado-factura-bg);  color: var(--estado-factura); }
+.estado-btn.ep  { background: var(--estado-propuesta-bg); color: var(--estado-propuesta); }
+.estado-btn.eg  { background: var(--estado-ganado-bg);   color: var(--estado-ganado); }
+.estado-btn.epe { background: var(--estado-perdido-bg);  color: var(--estado-perdido); }
+.estado-btn.ea  { background: var(--estado-ahorro-bg);   color: var(--estado-ahorro); }
+.estado-btn.ec  { background: var(--estado-comision-bg); color: var(--estado-comision); }
+.interaction-form {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.interactions-list { display: flex; flex-direction: column; gap: 10px; }
+
+.interaction-item {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid var(--border);
+}
+
+.interaction-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.interaction-type {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.interaction-date { font-size: 11px; color: var(--text3); margin-left: auto; }
+.interaction-author { font-size: 11px; color: var(--text2); }
+.interaction-desc { font-size: 13px; color: var(--text); }
+
+/* Alertas */
+.alert-item {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.alert-item.vencida { border-color: #FCA5A5; background: #FFF5F5; }
+.alert-item.completada { opacity: 0.6; }
+
+.alert-type-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--primary-light);
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.alert-info { flex: 1; }
+.alert-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.alert-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+/* Notas */
+.nota-item {
+  background: #FFFBEB;
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid #FDE68A;
+  margin-bottom: 8px;
+}
+
+.nota-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.nota-author { font-size: 12px; font-weight: 600; color: var(--secondary); }
+.nota-date { font-size: 11px; color: var(--text3); }
+.nota-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+/* ========== ALERTAS PAGE ========== */
+.alerts-page-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+}
+
+.alerts-page-item:hover { box-shadow: 0 4px 16px var(--shadow); }
+.alerts-page-item.vencida { border-left: 4px solid #EF4444; background: #FFF5F5; }
+.alerts-page-item.hoy { border-left: 4px solid var(--secondary); }
+
+/* ========== ADMIN ========== */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.user-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.user-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.user-card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FF6B35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.role-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.role-admin { background: #EDE9FE; color: #7C3AED; }
+.role-jefe { background: #DBEAFE; color: #1D4ED8; }
+.role-empleado { background: #D1FAE5; color: #065F46; }
+
+/* Code/invite badges */
+.code-badge {
+  font-family: monospace;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: var(--bg);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.code-badge:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* ========== PROGRESS BAR ========== */
+.progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text2);
+}
+
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.empty-state p { font-size: 14px; }
+
+/* ========== TOAST ========== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text);
+  color: white;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s;
+  max-width: 320px;
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--accent); }
+.toast.error { background: #EF4444; }
+
+/* ========== ALERTA MODAL ========== */
+.alerta-dia-modal { max-width: 560px; }
+.alerta-dia-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.alerta-dia-item.urgente { background: #FFF5F5; border-color: #FCA5A5; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    top: 0;
+    height: 100vh;
+    z-index: 101;
+  }
+  
+  .sidebar.open { left: 0; }
+  .sidebar-overlay.open { display: block; }
+  
+  .page-header { padding: 16px 20px; }
+  .page-body { padding: 16px 20px; }
+  
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  
+  .clients-table th:nth-child(n+4),
+  .clients-table td:nth-child(n+4) { display: none; }
+
+  .modal { max-width: 100%; border-radius: 20px 20px 0 0; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .auth-card { padding: 28px 20px; }
+}
+
+.hidden { display: none !important; }
+.page { display: none; }
+.page.active { display: block; }
+
+textarea { resize: vertical; min-height: 80px; }
+
+.switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.switch.on { background: var(--primary); }
+
+.switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.switch.on .switch-thumb { left: 23px; }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.page-btn {
+  padding: 6px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.page-btn:hover, .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+.bar-chart { padding: 8px 0; }
+.bar-row { margin-bottom: 12px; }
+.bar-label-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+.bar-label { color: var(--text2); font-weight: 500; }
+.bar-count { color: var(--text); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36"><polygon points="18,3 11,18 18,18 18,33 25,18 18,18 18,3" fill="white"/></svg>
+      </div>
+      <h1><span style="color:#00AEEF;font-weight:700">Energy</span><span style="color:#FF6B35;font-weight:900">Pro</span></h1>
+      <p>Gestión de asesoría energética</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">Registrarse</button>
+    </div>
+    <div id="auth-error" class="auth-error"></div>
+
+    <!-- LOGIN -->
+    <div id="login-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="tu@email.com" value="admin@energypro.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" placeholder="••••••••" value="admin123">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--text3)">
+        Demo: admin@energypro.com / admin123
+      </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-form" class="hidden">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="reg-name" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="tu@email.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="form-group">
+        <label>Código de invitación</label>
+        <input type="text" id="reg-code" placeholder="Código que te facilitó el admin" style="text-transform:uppercase">
+      </div>
+      <button class="btn-primary" onclick="doRegister()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 36 36"><polygon points="18,3 11,18 18,18 18,33 25,18 18,18 18,3" fill="white"/></svg></div>
+        <div class="logo-text"><span class="energy">Energy</span><span class="pro">Pro</span></div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-info">
+          <div class="user-avatar" id="sidebar-avatar">A</div>
+          <div>
+            <div class="user-name" id="sidebar-name">Admin</div>
+            <div class="user-role" id="sidebar-role">Super Admin</div>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Principal</div>
+        <div class="nav-item active" onclick="navigateTo('dashboard')">
+          <span class="nav-icon">📊</span> Dashboard
+        </div>
+        <div class="nav-item" onclick="navigateTo('clientes')">
+          <span class="nav-icon">👥</span> Clientes
+        </div>
+        <div class="nav-item" onclick="navigateTo('alertas')">
+          <span class="nav-icon">🔔</span> Alertas
+          <span class="nav-badge hidden" id="alertas-badge">0</span>
+        </div>
+        <div class="nav-section-title">Mi cuenta</div>
+        <div class="nav-item" onclick="openMiPerfil()">
+          <span class="nav-icon">👤</span> Mi perfil
+        </div>
+        <div class="nav-section-title" id="nav-admin-section" style="display:none">Administración</div>
+        <div class="nav-item hidden" id="nav-admin" onclick="navigateTo('admin')">
+          <span class="nav-icon">⚙️</span> Panel Admin
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-logout" onclick="doLogout()">
+          <span>🚪</span> Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="page-header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="hamburger" onclick="openSidebar()">☰</button>
+          <h2 id="page-title">Dashboard</h2>
+        </div>
+        <div id="header-actions"></div>
+      </div>
+
+      <!-- Pages -->
+      <div class="page-body">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard"></div>
+
+        <!-- CLIENTES -->
+        <div class="page" id="page-clientes"></div>
+
+        <!-- ALERTAS -->
+        <div class="page" id="page-alertas"></div>
+
+        <!-- ADMIN -->
+        <div class="page" id="page-admin"></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOverlay(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ALERTA DEL DIA MODAL -->
+<div class="modal-overlay" id="alerta-dia-overlay">
+  <div class="modal alerta-dia-modal" id="alerta-dia-content"></div>
+</div>
+
+<script>
+// ================= DATA =================
+const DB_KEY = 'energypro_v1';
+
+function loadDB() {
+  const raw = localStorage.getItem(DB_KEY);
+  if (raw) return JSON.parse(raw);
+  return initDB();
+}
+
+function saveDB(db) {
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+function initDB() {
+  const db = {
+    users: [
+      { id: 'u1', name: 'Admin EnergyPro', email: 'admin@energypro.com', password: 'admin123', role: 'admin', jefe_id: null, activo: true, creado: new Date().toISOString() },
+      { id: 'u2', name: 'Carlos Martínez', email: 'carlos@energypro.com', password: 'carlos123', role: 'jefe', jefe_id: null, activo: true, creado: new Date().toISOString(), drive_url: '' },
+      { id: 'u3', name: 'Laura González', email: 'laura@energypro.com', password: 'laura123', role: 'jefe', jefe_id: null, activo: true, creado: new Date().toISOString(), drive_url: '' },
+      { id: 'u4', name: 'Pedro Ruiz', email: 'pedro@energypro.com', password: 'pedro123', role: 'empleado', jefe_id: 'u2', activo: true, creado: new Date().toISOString() },
+      { id: 'u5', name: 'Ana López', email: 'ana@energypro.com', password: 'ana123', role: 'empleado', jefe_id: 'u2', activo: true, creado: new Date().toISOString() },
+      { id: 'u6', name: 'Miguel Torres', email: 'miguel@energypro.com', password: 'miguel123', role: 'empleado', jefe_id: 'u3', activo: true, creado: new Date().toISOString() },
+    ],
+    codigos: [
+      { code: 'JEFE2024', role: 'jefe', jefe_id: null, usado: false, creado: new Date().toISOString() },
+      { code: 'EMP2024A', role: 'empleado', jefe_id: 'u2', usado: false, creado: new Date().toISOString() },
+      { code: 'EMP2024B', role: 'empleado', jefe_id: 'u3', usado: false, creado: new Date().toISOString() },
+    ],
+    clientes: [
+      {
+        id: 'c1', nombre: 'Juan García Fernández', tipo_suministro: 'Luz', tipo_cliente: 'Particular',
+        nif: '12345678A', telefono: '612345678', email: 'juan@ejemplo.com', iban: 'ES12 3456 7890 1234 5678 9012',
+        direccion: 'Calle Mayor 1, Madrid', cups: 'ES0021000000000000AA', estado: 'Cerrado ganado',
+        empleado_id: 'u4', creado: new Date(Date.now()-30*24*3600000).toISOString(),
+        proxima_accion: '', comentarios: 'Cliente muy interesado en ahorro',
+        ganado_data: { peaje: '2.0TD', compania: 'Iberdrola', tarifa: 'PVPC', gestiones: 'Cambio de comercializadora completado', potencia_cambio: true, potencia_valor: '4.6kW', comentarios_ganado: 'Ahorro estimado 20%' },
+        interacciones: [
+          { id: 'i1', tipo: 'Llamada', fecha: new Date(Date.now()-5*24*3600000).toISOString(), desc: 'Contacto inicial. Muy receptivo.', autor_id: 'u4' }
+        ],
+        alertas: [],
+        notas: [{ id: 'n1', texto: 'Cliente referido por vecino.', fecha: new Date().toISOString(), autor_id: 'u4' }]
+      },
+      {
+        id: 'c2', nombre: 'Empresa Soluciones SL', tipo_suministro: 'Ambos', tipo_cliente: 'Empresa',
+        nif: 'B87654321', telefono: '911234567', email: 'info@soluciones.com', iban: '',
+        direccion: 'Av. de la Industria 42, Barcelona', cups: 'ES0031000000000001BB', estado: 'Propuesta enviada',
+        empleado_id: 'u5', creado: new Date(Date.now()-15*24*3600000).toISOString(),
+        proxima_accion: new Date(Date.now()+2*24*3600000).toISOString().split('T')[0],
+        comentarios: 'Pendiente de respuesta dirección',
+        ganado_data: null,
+        interacciones: [],
+        alertas: [{ id: 'a1', tipo: 'Reunión', fecha: new Date(Date.now()+2*24*3600000).toISOString().split('T')[0], hora: '10:00', desc: 'Reunión para revisar propuesta', estado: 'Pendiente' }],
+        notas: []
+      },
+      {
+        id: 'c3', nombre: 'María Sánchez Pérez', tipo_suministro: 'Gas', tipo_cliente: 'Particular',
+        nif: '87654321B', telefono: '623456789', email: 'maria@ejemplo.com', iban: 'ES98 7654 3210 9876 5432 1098',
+        direccion: 'Calle Libertad 8, Valencia', cups: '', estado: 'Factura recibida',
+        empleado_id: 'u6', creado: new Date(Date.now()-5*24*3600000).toISOString(),
+        proxima_accion: '', comentarios: '',
+        ganado_data: null, interacciones: [], alertas: [], notas: []
+      },
+      {
+        id: 'c4', nombre: 'Autónomos García', tipo_suministro: 'Luz', tipo_cliente: 'Autónomo',
+        nif: '11111111C', telefono: '600111222', email: 'autonomo@garcia.com', iban: '',
+        direccion: 'Calle Comercio 5, Sevilla', cups: '', estado: 'Cerrado perdido',
+        empleado_id: 'u4', creado: new Date(Date.now()-20*24*3600000).toISOString(),
+        proxima_accion: '', comentarios: 'No le convenció el precio',
+        ganado_data: null, interacciones: [], alertas: [], notas: []
+      },
+    ],
+    config: { empresa: 'EnergyPro', version: '1.0' }
+  };
+  saveDB(db);
+  return db;
+}
+
+let db = loadDB();
+let currentUser = null;
+let currentPage = 'dashboard';
+let clientesPagina = 1;
+const PER_PAGE = 20;
+let filterEstado = '';
+let filterEmpleado = '';
+let filterVista = 'todos';
+let searchTerm = '';
+
+// ================= AUTH =================
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass = document.getElementById('login-password').value;
+  const user = db.users.find(u => u.email.toLowerCase() === email && u.password === pass && u.activo);
+  if (!user) { showAuthError('Email o contraseña incorrectos'); return; }
+  currentUser = user;
+  showApp();
+  checkAlertasDelDia();
+}
+
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-password').value;
+  const code = document.getElementById('reg-code').value.trim().toUpperCase();
+
+  if (!name || !email || !pass || !code) { showAuthError('Rellena todos los campos'); return; }
+  if (pass.length < 6) { showAuthError('La contraseña debe tener al menos 6 caracteres'); return; }
+  if (db.users.find(u => u.email.toLowerCase() === email)) { showAuthError('Este email ya está registrado'); return; }
+
+  const codigoObj = db.codigos.find(c => c.code === code && !c.usado);
+  if (!codigoObj) { showAuthError('Código de invitación inválido o ya usado'); return; }
+
+  const newUser = {
+    id: 'u' + Date.now(),
+    name, email, password: pass,
+    role: codigoObj.role,
+    jefe_id: codigoObj.jefe_id,
+    activo: true,
+    creado: new Date().toISOString(),
+    drive_url: ''
+  };
+
+  codigoObj.usado = true;
+  db.users.push(newUser);
+  saveDB(db);
+  currentUser = newUser;
+  showApp();
+}
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  document.getElementById('sidebar-avatar').innerHTML = currentUser.foto
+    ? `<img src="${currentUser.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    : currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('sidebar-name').textContent = currentUser.name;
+  const roleLabels = { admin: '👑 Super Admin', jefe: '🏢 Jefe', empleado: '👤 Empleado' };
+  document.getElementById('sidebar-role').textContent = roleLabels[currentUser.role];
+
+  if (currentUser.role === 'admin') {
+    document.getElementById('nav-admin').classList.remove('hidden');
+    document.getElementById('nav-admin-section').style.display = 'block';
+  }
+
+  updateAlertasBadge();
+  navigateTo('dashboard');
+}
+
+// ================= NAVIGATION =================
+function navigateTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const pageTitles = { dashboard: 'Dashboard', clientes: 'Clientes', alertas: 'Alertas', admin: 'Panel de Administración' };
+  document.getElementById('page-title').textContent = pageTitles[page] || page;
+  document.getElementById('page-' + page).classList.add('active');
+
+  const navItems = { dashboard: 0, clientes: 1, alertas: 2, admin: 4 };
+  const allNav = document.querySelectorAll('.nav-item');
+  if (page === 'dashboard') allNav[0].classList.add('active');
+  if (page === 'clientes') allNav[1].classList.add('active');
+  if (page === 'alertas') allNav[2].classList.add('active');
+  if (page === 'admin') allNav[allNav.length-1].classList.add('active');
+
+  closeSidebar();
+
+  const headerActions = document.getElementById('header-actions');
+  headerActions.innerHTML = '';
+
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'clientes') {
+    headerActions.innerHTML = `<button class="btn-primary" style="width:auto;padding:10px 20px;font-size:14px" onclick="openNuevoCliente()">+ Nuevo cliente</button>`;
+    renderClientes();
+  }
+  if (page === 'alertas') {
+    headerActions.innerHTML = `<button class="btn-primary" style="width:auto;padding:10px 20px;font-size:14px" onclick="openNuevaAlertaGlobal()">+ Nueva alerta</button>`;
+    renderAlertas();
+  }
+  if (page === 'admin') renderAdmin();
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.querySelector('.sidebar-overlay').classList.add('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.querySelector('.sidebar-overlay').classList.remove('open');
+}
+
+// ================= DASHBOARD =================
+function renderDashboard() {
+  const misClientes = getClientesVisibles();
+  const estados = ['Factura recibida','Propuesta enviada','Cerrado ganado','Cerrado perdido','Ahorro','Comisión'];
+  const counts = {};
+  estados.forEach(e => counts[e] = 0);
+  misClientes.forEach(c => { if (counts[c.estado] !== undefined) counts[c.estado]++; });
+
+  const alertasPendientes = getTodasAlertas().filter(a => a.estado === 'Pendiente' && !esAlertaFutura(a));
+  const hoy = new Date().toISOString().split('T')[0];
+  const alertasHoy = getTodasAlertas().filter(a => a.estado === 'Pendiente' && a.fecha === hoy);
+
+  const recientes = [...misClientes].sort((a,b) => new Date(b.creado) - new Date(a.creado)).slice(0,5);
+
+  const isJefeAdmin = currentUser.role !== 'empleado';
+
+  let empleadosTable = '';
+  if (isJefeAdmin) {
+    const empleados = getEmpleadosBajoMi();
+    empleadosTable = `
+    <div class="card" style="grid-column:1/-1">
+      <h3>📈 Rendimiento del equipo</h3>
+      <table class="clients-table">
+        <thead><tr><th>Empleado</th><th>Clientes</th><th>Ganados</th><th>Perdidos</th><th>En propuesta</th></tr></thead>
+        <tbody>
+          ${empleados.map(emp => {
+            const clis = db.clientes.filter(c => c.empleado_id === emp.id);
+            return `<tr>
+              <td><strong>${emp.name}</strong></td>
+              <td>${clis.length}</td>
+              <td><span style="color:var(--accent);font-weight:700">${clis.filter(c=>c.estado==='Cerrado ganado').length}</span></td>
+              <td><span style="color:#EF4444;font-weight:700">${clis.filter(c=>c.estado==='Cerrado perdido').length}</span></td>
+              <td>${clis.filter(c=>c.estado==='Propuesta enviada').length}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  const estadoColors = {
+    'Factura recibida': '#F59E0B',
+    'Propuesta enviada': '#3B82F6',
+    'Cerrado ganado': '#10B981',
+    'Cerrado perdido': '#EF4444',
+    'Ahorro': '#8B5CF6',
+    'Comisión': '#EC4899'
+  };
+
+  const maxCount = Math.max(1, ...Object.values(counts));
+
+  document.getElementById('page-dashboard').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">Total clientes</div>
+        <div class="stat-value">${misClientes.length}</div>
+        <div class="stat-sub">en cartera</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-label">Cerrados ganados</div>
+        <div class="stat-value">${counts['Cerrado ganado']}</div>
+        <div class="stat-sub">contratos activos</div>
+      </div>
+      <div class="stat-card secondary">
+        <div class="stat-label">Alertas hoy</div>
+        <div class="stat-value">${alertasHoy.length}</div>
+        <div class="stat-sub">pendientes</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">En propuesta</div>
+        <div class="stat-value">${counts['Propuesta enviada']}</div>
+        <div class="stat-sub">esperando respuesta</div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>📊 Clientes por estado</h3>
+        <div class="bar-chart">
+          ${estados.map(e => `
+            <div class="bar-row">
+              <div class="bar-label-row">
+                <span class="bar-label">${e}</span>
+                <span class="bar-count">${counts[e]}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:${(counts[e]/maxCount)*100}%;background:${estadoColors[e]}"></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🕐 Últimos clientes añadidos</h3>
+        ${recientes.length === 0 ? '<p style="color:var(--text3);font-size:14px">Sin clientes aún</p>' :
+          recientes.map(c => `
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openClienteDetail('${c.id}')">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--primary)">${c.nombre.charAt(0)}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nombre}</div>
+                <div style="font-size:12px;color:var(--text2)">${formatDate(c.creado)}</div>
+              </div>
+              ${estadoBadge(c.estado)}
+            </div>
+          `).join('')
+        }
+      </div>
+
+      ${alertasPendientes.length > 0 ? `
+      <div class="card">
+        <h3>🔔 Alertas pendientes (${alertasPendientes.length})</h3>
+        ${alertasPendientes.slice(0,5).map(a => {
+          const cliente = db.clientes.find(c => c.id === a.clienteId);
+          const vencida = a.fecha < hoy;
+          return `<div class="alert-item ${vencida?'vencida':''}" style="margin-bottom:8px">
+            <div>
+              <div class="alert-type-badge" style="${vencida?'background:#FEE2E2;color:#EF4444':''}">${a.tipo}</div>
+            </div>
+            <div class="alert-info">
+              <div class="alert-title">${a.desc}</div>
+              <div class="alert-meta">${cliente ? cliente.nombre : ''} · ${a.fecha}${a.hora?' '+a.hora:''}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>` : ''}
+
+      ${empleadosTable}
+    </div>
+  `;
+}
+
+// ================= CLIENTES =================
+function getClientesVisibles() {
+  if (currentUser.role === 'admin') return db.clientes;
+  if (currentUser.role === 'jefe') {
+    const empleadosIds = db.users.filter(u => u.jefe_id === currentUser.id).map(u => u.id);
+    if (filterVista === 'mios') return db.clientes.filter(c => c.empleado_id === currentUser.id);
+    if (filterVista === 'empleados') return db.clientes.filter(c => empleadosIds.includes(c.empleado_id));
+    return db.clientes.filter(c => c.empleado_id === currentUser.id || empleadosIds.includes(c.empleado_id));
+  }
+  return db.clientes.filter(c => c.empleado_id === currentUser.id);
+}
+
+function getEmpleadosBajoMi() {
+  if (currentUser.role === 'admin') return db.users.filter(u => u.role === 'empleado');
+  return db.users.filter(u => u.jefe_id === currentUser.id);
+}
+
+function renderClientes() {
+  let clientes = getClientesVisibles();
+
+  // Filtros
+  if (searchTerm) {
+    const s = searchTerm.toLowerCase();
+    clientes = clientes.filter(c =>
+      c.nombre.toLowerCase().includes(s) ||
+      (c.nif||'').toLowerCase().includes(s) ||
+      (c.email||'').toLowerCase().includes(s) ||
+      (c.telefono||'').includes(s) ||
+      (c.cups||'').toLowerCase().includes(s) ||
+      (c.empresa||'').toLowerCase().includes(s)
+    );
+  }
+  if (filterEstado) clientes = clientes.filter(c => c.estado === filterEstado);
+  if (filterEmpleado) clientes = clientes.filter(c => c.empleado_id === filterEmpleado);
+
+  const total = clientes.length;
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  if (clientesPagina > totalPages) clientesPagina = 1;
+  const paginados = clientes.slice((clientesPagina-1)*PER_PAGE, clientesPagina*PER_PAGE);
+
+  const isJefeAdmin = currentUser.role !== 'empleado';
+  const empleados = getEmpleadosBajoMi();
+
+  let vistaFilter = '';
+  if (currentUser.role === 'jefe') {
+    vistaFilter = `
+      <select class="filter-select" onchange="filterVista=this.value;clientesPagina=1;renderClientes()">
+        <option value="todos" ${filterVista==='todos'?'selected':''}>Todos mis clientes</option>
+        <option value="mios" ${filterVista==='mios'?'selected':''}>Solo mis clientes</option>
+        <option value="empleados" ${filterVista==='empleados'?'selected':''}>Clientes empleados</option>
+      </select>`;
+  }
+
+  let empFilter = '';
+  if (isJefeAdmin && empleados.length > 0) {
+    empFilter = `<select class="filter-select" onchange="filterEmpleado=this.value;clientesPagina=1;renderClientes()">
+      <option value="">Todos los empleados</option>
+      ${empleados.map(e => `<option value="${e.id}" ${filterEmpleado===e.id?'selected':''}>${e.name}</option>`).join('')}
+    </select>`;
+  }
+
+  document.getElementById('page-clientes').innerHTML = `
+    <div class="filters-bar">
+      <div class="search-wrapper">
+        <input class="search-input" placeholder="Buscar por nombre, NIF, CUPS, teléfono..." 
+          value="${searchTerm}" oninput="searchTerm=this.value;clientesPagina=1;renderClientes()">
+      </div>
+      <select class="filter-select" onchange="filterEstado=this.value;clientesPagina=1;renderClientes()">
+        <option value="">Todos los estados</option>
+        <option value="Factura recibida">Factura recibida</option>
+        <option value="Propuesta enviada">Propuesta enviada</option>
+        <option value="Cerrado ganado">Cerrado ganado</option>
+        <option value="Cerrado perdido">Cerrado perdido</option>
+        <option value="Ahorro">Ahorro</option>
+        <option value="Comisión">Comisión</option>
+      </select>
+      ${empFilter}
+      ${vistaFilter}
+      <span style="font-size:13px;color:var(--text2);white-space:nowrap">${total} cliente${total!==1?'s':''}</span>
+    </div>
+
+    <div class="clients-table-wrap">
+      <table class="clients-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Teléfono</th>
+            <th>Asignado a</th>
+            <th>Fecha alta</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${paginados.length === 0 ? `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🔍</div><h3>Sin resultados</h3><p>Prueba con otros filtros</p></div></td></tr>` :
+            paginados.map(c => {
+              const empleado = db.users.find(u => u.id === c.empleado_id);
+              return `<tr onclick="openClienteDetail('${c.id}')">
+                <td>
+                  <div class="client-name">${c.nombre}</div>
+                  ${c.cups ? `<div class="client-cups">${c.cups}</div>` : ''}
+                </td>
+                <td>${suministroBadge(c.tipo_suministro)}</td>
+                <td>${estadoBadge(c.estado)}</td>
+                <td style="font-size:13px">${c.telefono||'-'}</td>
+                <td style="font-size:13px;color:var(--text2)">${empleado?empleado.name:'-'}</td>
+                <td style="font-size:13px;color:var(--text2)">${formatDate(c.creado)}</td>
+              </tr>`;
+            }).join('')
+          }
+        </tbody>
+      </table>
+      ${totalPages > 1 ? `
+        <div class="pagination">
+          <button class="page-btn" onclick="clientesPagina=Math.max(1,clientesPagina-1);renderClientes()" ${clientesPagina===1?'disabled':''}>‹</button>
+          ${Array.from({length:totalPages},(_,i)=>`<button class="page-btn ${clientesPagina===i+1?'active':''}" onclick="clientesPagina=${i+1};renderClientes()">${i+1}</button>`).join('')}
+          <button class="page-btn" onclick="clientesPagina=Math.min(totalPages,clientesPagina+1);renderClientes()" ${clientesPagina===totalPages?'disabled':''}>›</button>
+        </div>` : ''}
+    </div>
+  `;
+}
+
+// ================= NUEVO CLIENTE =================
+function openNuevoCliente() {
+  const empleados = currentUser.role === 'admin' ? db.users.filter(u=>u.role==='empleado'||u.role==='jefe') :
+                    currentUser.role === 'jefe' ? [currentUser, ...db.users.filter(u=>u.jefe_id===currentUser.id)] :
+                    [currentUser];
+
+  openModal('Nuevo cliente', `
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nombre y apellidos *</label>
+        <input id="nc-nombre" placeholder="Nombre completo">
+      </div>
+      <div class="form-group">
+        <label>Tipo de suministro *</label>
+        <select id="nc-suministro">
+          <option>Luz</option>
+          <option>Gas</option>
+          <option>Ambos</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo de cliente *</label>
+        <select id="nc-tipo" onchange="updateDocLabel()">
+          <option>Particular</option>
+          <option>Autónomo</option>
+          <option>Empresa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label id="nc-doc-label">DNI</label>
+        <input id="nc-nif" placeholder="12345678A">
+      </div>
+      <div class="form-group">
+        <label>CUPS</label>
+        <input id="nc-cups" placeholder="ES0021000000000000AA">
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input id="nc-telefono" type="tel" placeholder="600 000 000">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input id="nc-email" type="email" placeholder="cliente@email.com">
+      </div>
+      <div class="form-group full">
+        <label>IBAN</label>
+        <input id="nc-iban" placeholder="ES00 0000 0000 0000 0000 0000">
+      </div>
+      <div class="form-group full">
+        <label>Dirección completa</label>
+        <input id="nc-direccion" placeholder="Calle, número, piso, ciudad, CP">
+      </div>
+      <div class="form-group">
+        <label>Estado inicial</label>
+        <select id="nc-estado">
+          <option>Factura recibida</option>
+          <option>Propuesta enviada</option>
+          <option>Cerrado ganado</option>
+          <option>Cerrado perdido</option>
+          <option>Ahorro</option>
+          <option>Comisión</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Asignar a</label>
+        <select id="nc-empleado" ${currentUser.role === 'empleado' ? 'disabled' : ''}>
+          ${empleados.map(e => `<option value="${e.id}" ${e.id===currentUser.id?'selected':''}>${e.name}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>💰 Ahorro estimado (€)</label>
+        <input id="nc-ahorro" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label>🤝 Comisión estimada (€)</label>
+        <input id="nc-comision" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="form-group full">
+        <label>Comentarios</label>
+        <textarea id="nc-comentarios" placeholder="Observaciones iniciales..."></textarea>
+      </div>
+    </div>
+  `, `
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" style="width:auto" onclick="saveNuevoCliente()">Crear cliente</button>
+  `);
+}
+
+function updateDocLabel() {
+  const tipo = document.getElementById('nc-tipo') || document.getElementById('ec-tipo');
+  const label = document.getElementById('nc-doc-label') || document.getElementById('ec-doc-label');
+  if (!tipo || !label) return;
+  const map = { 'Particular': 'DNI', 'Autónomo': 'NIE', 'Empresa': 'CIF' };
+  label.textContent = map[tipo.value] || 'NIF';
+}
+
+function updateDocLabelEdit() {
+  const tipo = document.getElementById('ec-tipo');
+  const label = document.getElementById('ec-doc-label');
+  if (!tipo || !label) return;
+  const map = { 'Particular': 'DNI', 'Autónomo': 'NIE', 'Empresa': 'CIF' };
+  label.textContent = map[tipo.value] || 'NIF';
+}
+
+function saveNuevoCliente() {
+  const nombre = document.getElementById('nc-nombre').value.trim();
+  if (!nombre) { showToast('El nombre es obligatorio', 'error'); return; }
+
+  const empSelect = document.getElementById('nc-empleado');
+  const empleadoId = empSelect ? empSelect.value : currentUser.id;
+
+  const c = {
+    id: 'c' + Date.now(),
+    nombre,
+    tipo_suministro: document.getElementById('nc-suministro').value,
+    tipo_cliente: document.getElementById('nc-tipo').value,
+    nif: document.getElementById('nc-nif').value.trim(),
+    cups: document.getElementById('nc-cups').value.trim(),
+    telefono: document.getElementById('nc-telefono').value.trim(),
+    email: document.getElementById('nc-email').value.trim(),
+    iban: document.getElementById('nc-iban').value.trim(),
+    direccion: document.getElementById('nc-direccion').value.trim(),
+    estado: document.getElementById('nc-estado').value,
+    empleado_id: empleadoId,
+    ahorro_estimado: parseFloat(document.getElementById('nc-ahorro').value) || 0,
+    comision_estimada: parseFloat(document.getElementById('nc-comision').value) || 0,
+    comentarios: document.getElementById('nc-comentarios').value.trim(),
+    creado: new Date().toISOString(),
+    proxima_accion: '',
+    ganado_data: null,
+    interacciones: [],
+    alertas: [],
+    notas: []
+  };
+
+  db.clientes.push(c);
+  saveDB(db);
+  closeModal();
+  showToast('Cliente creado correctamente', 'success');
+  renderClientes();
+}
+
+// ================= DETALLE CLIENTE =================
+function openClienteDetail(id) {
+  const c = db.clientes.find(x => x.id === id);
+  if (!c) return;
+
+  const empleado = db.users.find(u => u.id === c.empleado_id);
+  const hoy = new Date().toISOString().split('T')[0];
+  const canEdit = currentUser.role === 'admin' || currentUser.role === 'jefe' || c.empleado_id === currentUser.id;
+
+  const tabs = ['info','notas','interacciones','alertas'];
+  const tabLabels = ['📋 Información','📝 Notas','💬 Interacciones','🔔 Alertas'];
+
+  const ganadoSection2 = c.estado === 'Cerrado ganado' ? `
+    <div class="ganado-section">
+      <h4>⚡ Datos del contrato</h4>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Peaje de acceso</label>
+          <input id="gd-peaje" value="${(c.ganado_data||{}).peaje||''}" placeholder="ej: 2.0TD" ${canEdit?'':'readonly'}>
+        </div>
+        <div class="form-group">
+          <label>Compañía contratada</label>
+          <input id="gd-compania" value="${(c.ganado_data||{}).compania||''}" placeholder="ej: Iberdrola" ${canEdit?'':'readonly'}>
+        </div>
+        <div class="form-group">
+          <label>Tarifa contratada</label>
+          <input id="gd-tarifa" value="${(c.ganado_data||{}).tarifa||''}" placeholder="ej: PVPC, Fijo..." ${canEdit?'':'readonly'}>
+        </div>
+        <div class="form-group">
+          <label>Cambio de potencia</label>
+          <select id="gd-potencia-cambio" ${canEdit?'':'disabled'} onchange="togglePotencia()">
+            <option value="no" ${(c.ganado_data||{}).potencia_cambio?'':'selected'}>No</option>
+            <option value="si" ${(c.ganado_data||{}).potencia_cambio?'selected':''}>Sí</option>
+          </select>
+        </div>
+        <div class="form-group" id="gd-potencia-wrap" style="${(c.ganado_data||{}).potencia_cambio?'':'display:none'}">
+          <label>Nueva potencia</label>
+          <input id="gd-potencia-valor" value="${(c.ganado_data||{}).potencia_valor||''}" placeholder="ej: 4.6 kW" ${canEdit?'':'readonly'}>
+        </div>
+        <div class="form-group full">
+          <label>Gestiones realizadas</label>
+          <textarea id="gd-gestiones" placeholder="Describe las gestiones realizadas..." ${canEdit?'':'readonly'}>${(c.ganado_data||{}).gestiones||''}</textarea>
+        </div>
+        <div class="form-group full">
+          <label>Comentarios del contrato</label>
+          <textarea id="gd-comentarios-ganado" placeholder="Observaciones..." ${canEdit?'':'readonly'}>${(c.ganado_data||{}).comentarios_ganado||''}</textarea>
+        </div>
+      </div>
+      ${canEdit ? `<button class="btn-green btn-sm" onclick="saveGanadoData('${c.id}')">💾 Guardar datos contrato</button>` : ''}
+    </div>
+  ` : '';
+
+  const infoTab = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;gap:10px">
+      ${canEdit ? `<button class="btn-secondary" onclick="openEditarCliente('${c.id}')">✏️ Editar datos</button>` : ''}
+    </div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:8px">Estado del cliente</div>
+      ${canEdit ? renderEstadoSelector(c.estado, c.id) : estadoBadge(c.estado)}
+    </div>
+    <div id="ganado-section-wrap" style="display:${c.estado==='Cerrado ganado'?'block':'none'}">
+      ${ganadoSection2}
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><label>Nombre completo</label><span>${c.nombre}</span></div>
+      <div class="info-item"><label>Tipo de cliente</label><span>${c.tipo_cliente||'-'}</span></div>
+      <div class="info-item"><label>Tipo de suministro</label><span>${suministroBadge(c.tipo_suministro)}</span></div>
+      <div class="info-item"><label>Estado</label><span>${estadoBadge(c.estado)}</span></div>
+      <div class="info-item"><label>NIF / NIE / CIF</label><span>${c.nif||'-'}</span></div>
+      <div class="info-item"><label>CUPS</label><span style="font-family:monospace;font-size:12px">${c.cups||'-'}</span></div>
+      <div class="info-item"><label>Teléfono</label><span>${c.telefono||'-'}</span></div>
+      <div class="info-item"><label>Email</label><span>${c.email||'-'}</span></div>
+      <div class="info-item"><label>IBAN</label><span style="font-family:monospace;font-size:12px">${c.iban||'-'}</span></div>
+      <div class="info-item"><label>Dirección</label><span>${c.direccion||'-'}</span></div>
+      <div class="info-item"><label>Empleado asignado</label><span>${empleado?empleado.name:'-'}</span></div>
+      <div class="info-item"><label>Fecha de alta</label><span>${formatDate(c.creado)}</span></div>
+      ${c.ahorro_estimado ? `<div class="info-item"><label>💰 Ahorro estimado</label><span style="color:var(--accent);font-weight:700">${c.ahorro_estimado.toFixed(2)} €</span></div>` : ''}
+      ${c.comision_estimada ? `<div class="info-item"><label>🤝 Comisión estimada</label><span style="color:var(--secondary);font-weight:700">${c.comision_estimada.toFixed(2)} €</span></div>` : ''}
+    </div>
+    ${c.comentarios ? `<div class="form-group"><label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)">Comentarios</label><div style="background:var(--bg);padding:12px;border-radius:var(--radius-sm);font-size:14px;color:var(--text);border:1px solid var(--border)">${c.comentarios}</div></div>` : ''}
+  `;
+
+  const notasTab = `
+    ${canEdit ? `
+    <div class="interaction-form">
+      <div class="form-group">
+        <label>Nueva nota</label>
+        <textarea id="nota-nueva" placeholder="Escribe tu nota aquí..." rows="3"></textarea>
+      </div>
+      <button class="btn-green btn-sm" onclick="addNota('${c.id}')">➕ Añadir nota</button>
+    </div>` : ''}
+    <div class="interactions-list">
+      ${c.notas.length === 0 ? '<div class="empty-state"><div class="empty-icon">📝</div><h3>Sin notas</h3><p>Añade la primera nota</p></div>' :
+        [...c.notas].reverse().map(n => {
+          const autor = db.users.find(u => u.id === n.autor_id);
+          return `<div class="nota-item">
+            <div class="nota-header">
+              <span class="nota-author">${autor?autor.name:'Desconocido'}</span>
+              <span class="nota-date">${formatDateTime(n.fecha)}</span>
+            </div>
+            <div class="nota-text">${n.texto}</div>
+          </div>`;
+        }).join('')
+      }
+    </div>
+  `;
+
+  const interaccionesTab = `
+    ${canEdit ? `
+    <div class="interaction-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo</label>
+          <select id="int-tipo">
+            <option>Llamada</option><option>Email</option><option>Reunión</option><option>Visita</option><option>WhatsApp</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input id="int-fecha" type="date" value="${hoy}">
+        </div>
+        <div class="form-group full">
+          <label>Descripción</label>
+          <textarea id="int-desc" placeholder="¿Qué ocurrió?"></textarea>
+        </div>
+      </div>
+      <button class="btn-green btn-sm" onclick="addInteraccion('${c.id}')">➕ Registrar</button>
+    </div>` : ''}
+    <div class="interactions-list">
+      ${c.interacciones.length === 0 ? '<div class="empty-state"><div class="empty-icon">💬</div><h3>Sin interacciones</h3><p>Registra el primer contacto</p></div>' :
+        [...c.interacciones].reverse().map(i => {
+          const autor = db.users.find(u => u.id === i.autor_id);
+          return `<div class="interaction-item">
+            <div class="interaction-header">
+              <span class="interaction-type">${i.tipo}</span>
+              <span class="interaction-author">${autor?autor.name:''}</span>
+              <span class="interaction-date">${formatDate(i.fecha)}</span>
+            </div>
+            <div class="interaction-desc">${i.desc}</div>
+          </div>`;
+        }).join('')
+      }
+    </div>
+  `;
+
+  const alertasTab = `
+    ${canEdit ? `
+    <div class="interaction-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de alerta</label>
+          <select id="alerta-tipo">
+            <option>Llamada</option><option>Reunión</option><option>Email</option><option>Tarea</option><option>Renovación</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input id="alerta-fecha" type="date" value="${hoy}">
+        </div>
+        <div class="form-group">
+          <label>Hora (opcional)</label>
+          <input id="alerta-hora" type="time">
+        </div>
+        <div class="form-group full">
+          <label>Descripción</label>
+          <textarea id="alerta-desc" placeholder="¿Qué hay que hacer?"></textarea>
+        </div>
+      </div>
+      <button class="btn-orange btn-sm" onclick="addAlerta('${c.id}')">➕ Crear alerta</button>
+    </div>` : ''}
+    <div>
+      ${c.alertas.length === 0 ? '<div class="empty-state"><div class="empty-icon">🔔</div><h3>Sin alertas</h3><p>Crea recordatorios para este cliente</p></div>' :
+        [...c.alertas].sort((a,b)=>a.fecha.localeCompare(b.fecha)).map(a => {
+          const vencida = a.fecha < hoy && a.estado === 'Pendiente';
+          return `<div class="alert-item ${vencida?'vencida':''} ${a.estado==='Completada'?'completada':''}">
+            <div class="alert-type-badge" style="${vencida?'background:#FEE2E2;color:#EF4444':''}">${a.tipo}</div>
+            <div class="alert-info">
+              <div class="alert-title">${a.desc}</div>
+              <div class="alert-meta">${a.fecha}${a.hora?' · '+a.hora:''} · ${a.estado}</div>
+            </div>
+            ${canEdit && a.estado==='Pendiente' ? `<button class="btn-green btn-sm" onclick="completarAlerta('${c.id}','${a.id}')">✓</button>` : ''}
+          </div>`;
+        }).join('')
+      }
+    </div>
+  `;
+
+  const tabContents = [infoTab, notasTab, interaccionesTab, alertasTab];
+
+  openModal(c.nombre, `
+    <div class="detail-tabs">
+      ${tabLabels.map((l,i) => `<button class="detail-tab ${i===0?'active':''}" onclick="switchDetailTab(${i})">${l}</button>`).join('')}
+    </div>
+    <div style="padding:20px 28px">
+      ${tabContents.map((content, i) => `<div class="detail-section ${i===0?'active':''}" id="detail-section-${i}">${content}</div>`).join('')}
+    </div>
+  `, '', true);
+
+  document.querySelector('.modal').classList.add('detail-modal');
+}
+
+function switchDetailTab(idx) {
+  document.querySelectorAll('.detail-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.detail-section').forEach((s,i) => s.classList.toggle('active', i===idx));
+}
+
+function togglePotencia() {
+  const val = document.getElementById('gd-potencia-cambio').value;
+  document.getElementById('gd-potencia-wrap').style.display = val === 'si' ? 'block' : 'none';
+}
+
+function saveGanadoData(id) {
+  const c = db.clientes.find(x => x.id === id);
+  if (!c) return;
+  c.ganado_data = {
+    peaje: document.getElementById('gd-peaje').value,
+    compania: document.getElementById('gd-compania').value,
+    tarifa: document.getElementById('gd-tarifa').value,
+    potencia_cambio: document.getElementById('gd-potencia-cambio').value === 'si',
+    potencia_valor: document.getElementById('gd-potencia-valor') ? document.getElementById('gd-potencia-valor').value : '',
+    gestiones: document.getElementById('gd-gestiones').value,
+    comentarios_ganado: document.getElementById('gd-comentarios-ganado').value
+  };
+  saveDB(db);
+  showToast('Datos del contrato guardados', 'success');
+}
+
+function addNota(id) {
+  const c = db.clientes.find(x => x.id === id);
+  const texto = document.getElementById('nota-nueva').value.trim();
+  if (!texto) return;
+  c.notas.push({ id: 'n'+Date.now(), texto, fecha: new Date().toISOString(), autor_id: currentUser.id });
+  saveDB(db);
+  showToast('Nota añadida', 'success');
+  openClienteDetail(id);
+  setTimeout(() => switchDetailTab(1), 50);
+}
+
+function addInteraccion(id) {
+  const c = db.clientes.find(x => x.id === id);
+  const desc = document.getElementById('int-desc').value.trim();
+  if (!desc) return;
+  c.interacciones.push({
+    id: 'i'+Date.now(),
+    tipo: document.getElementById('int-tipo').value,
+    fecha: document.getElementById('int-fecha').value,
+    desc,
+    autor_id: currentUser.id
+  });
+  saveDB(db);
+  showToast('Interacción registrada', 'success');
+  openClienteDetail(id);
+  setTimeout(() => switchDetailTab(2), 50);
+}
+
+function addAlerta(id) {
+  const c = db.clientes.find(x => x.id === id);
+  const desc = document.getElementById('alerta-desc').value.trim();
+  const fecha = document.getElementById('alerta-fecha').value;
+  if (!desc || !fecha) { showToast('Rellena descripción y fecha', 'error'); return; }
+  c.alertas.push({
+    id: 'a'+Date.now(),
+    tipo: document.getElementById('alerta-tipo').value,
+    fecha,
+    hora: document.getElementById('alerta-hora').value,
+    desc,
+    estado: 'Pendiente'
+  });
+  saveDB(db);
+  updateAlertasBadge();
+  showToast('Alerta creada', 'success');
+  openClienteDetail(id);
+  setTimeout(() => switchDetailTab(3), 50);
+}
+
+function completarAlerta(clienteId, alertaId) {
+  const c = db.clientes.find(x => x.id === clienteId);
+  const a = c.alertas.find(x => x.id === alertaId);
+  if (a) { a.estado = 'Completada'; saveDB(db); updateAlertasBadge(); openClienteDetail(clienteId); setTimeout(()=>switchDetailTab(3),50); }
+}
+
+// ================= EDITAR CLIENTE =================
+function openEditarCliente(id) {
+  const c = db.clientes.find(x => x.id === id);
+  const docMap = { 'Particular': 'DNI', 'Autónomo': 'NIE', 'Empresa': 'CIF' };
+  const docLabel = docMap[c.tipo_cliente] || 'NIF';
+  const canChangeAssign = currentUser.role === 'admin' || currentUser.role === 'jefe';
+  const empleados = currentUser.role === 'admin' ? db.users.filter(u=>u.role!=='admin') :
+                    currentUser.role === 'jefe' ? [currentUser, ...db.users.filter(u=>u.jefe_id===currentUser.id)] :
+                    [currentUser];
+
+  openModal('Editar cliente', `
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nombre y apellidos *</label>
+        <input id="ec-nombre" value="${c.nombre}">
+      </div>
+      <div class="form-group">
+        <label>Tipo de suministro</label>
+        <select id="ec-suministro">
+          ${['Luz','Gas','Ambos'].map(s=>`<option ${c.tipo_suministro===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo de cliente</label>
+        <select id="ec-tipo" onchange="updateDocLabelEdit()">
+          ${['Particular','Autónomo','Empresa'].map(s=>`<option ${c.tipo_cliente===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label id="ec-doc-label">${docLabel}</label>
+        <input id="ec-nif" value="${c.nif||''}">
+      </div>
+      <div class="form-group">
+        <label>CUPS</label>
+        <input id="ec-cups" value="${c.cups||''}">
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input id="ec-telefono" value="${c.telefono||''}">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input id="ec-email" value="${c.email||''}">
+      </div>
+      <div class="form-group full">
+        <label>IBAN</label>
+        <input id="ec-iban" value="${c.iban||''}">
+      </div>
+      <div class="form-group full">
+        <label>Dirección completa</label>
+        <input id="ec-direccion" value="${c.direccion||''}">
+      </div>
+      <div class="form-group">
+        <label>Estado</label>
+        <select id="ec-estado">
+          ${['Factura recibida','Propuesta enviada','Cerrado ganado','Cerrado perdido','Ahorro','Comisión'].map(s=>`<option ${c.estado===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Asignar a ${!canChangeAssign ? '(solo jefes pueden cambiar)' : ''}</label>
+        <select id="ec-empleado" ${!canChangeAssign ? 'disabled' : ''}>
+          ${empleados.map(e=>`<option value="${e.id}" ${c.empleado_id===e.id?'selected':''}>${e.name}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>💰 Ahorro estimado (€)</label>
+        <input id="ec-ahorro" type="number" min="0" step="0.01" value="${c.ahorro_estimado||0}">
+      </div>
+      <div class="form-group">
+        <label>🤝 Comisión estimada (€)</label>
+        <input id="ec-comision" type="number" min="0" step="0.01" value="${c.comision_estimada||0}">
+      </div>
+      <div class="form-group full">
+        <label>Comentarios</label>
+        <textarea id="ec-comentarios">${c.comentarios||''}</textarea>
+      </div>
+    </div>
+  `, `
+    <button class="btn-danger" onclick="deleteCliente('${c.id}')">🗑 Eliminar</button>
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" style="width:auto" onclick="saveEditarCliente('${c.id}')">Guardar cambios</button>
+  `);
+}
+
+function saveEditarCliente(id) {
+  const c = db.clientes.find(x => x.id === id);
+  const nombre = document.getElementById('ec-nombre').value.trim();
+  if (!nombre) { showToast('El nombre es obligatorio', 'error'); return; }
+  c.nombre = nombre;
+  c.tipo_suministro = document.getElementById('ec-suministro').value;
+  c.tipo_cliente = document.getElementById('ec-tipo').value;
+  c.nif = document.getElementById('ec-nif').value.trim();
+  c.cups = document.getElementById('ec-cups').value.trim();
+  c.telefono = document.getElementById('ec-telefono').value.trim();
+  c.email = document.getElementById('ec-email').value.trim();
+  c.iban = document.getElementById('ec-iban').value.trim();
+  c.direccion = document.getElementById('ec-direccion').value.trim();
+  c.estado = document.getElementById('ec-estado').value;
+  const empEl = document.getElementById('ec-empleado');
+  if (empEl && !empEl.disabled) c.empleado_id = empEl.value;
+  c.ahorro_estimado = parseFloat(document.getElementById('ec-ahorro').value) || 0;
+  c.comision_estimada = parseFloat(document.getElementById('ec-comision').value) || 0;
+  c.comentarios = document.getElementById('ec-comentarios').value.trim();
+  saveDB(db);
+  showToast('Cliente actualizado', 'success');
+  closeModal();
+  if (currentPage === 'clientes') renderClientes();
+}
+
+function deleteCliente(id) {
+  if (!confirm('¿Seguro que quieres eliminar este cliente? Esta acción no se puede deshacer.')) return;
+  db.clientes = db.clientes.filter(c => c.id !== id);
+  saveDB(db);
+  closeModal();
+  showToast('Cliente eliminado', 'success');
+  if (currentPage === 'clientes') renderClientes();
+}
+
+// ================= ALERTAS PAGE =================
+function getTodasAlertas() {
+  const clientes = getClientesVisibles();
+  const hoy = new Date().toISOString().split('T')[0];
+  const result = [];
+  clientes.forEach(c => {
+    c.alertas.forEach(a => {
+      result.push({ ...a, clienteId: c.id, clienteNombre: c.nombre });
+    });
+  });
+  return result;
+}
+
+function esAlertaFutura(a) {
+  const hoy = new Date().toISOString().split('T')[0];
+  return a.fecha > hoy;
+}
+
+function updateAlertasBadge() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const pendientes = getTodasAlertas().filter(a => a.estado === 'Pendiente' && a.fecha <= hoy).length;
+  const badge = document.getElementById('alertas-badge');
+  if (badge) {
+    badge.textContent = pendientes;
+    badge.classList.toggle('hidden', pendientes === 0);
+  }
+}
+
+function checkAlertasDelDia() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const alertasHoy = getTodasAlertas().filter(a => a.estado === 'Pendiente' && a.fecha === hoy);
+  const vencidas = getTodasAlertas().filter(a => a.estado === 'Pendiente' && a.fecha < hoy);
+
+  if (alertasHoy.length === 0 && vencidas.length === 0) return;
+
+  const overlay = document.getElementById('alerta-dia-overlay');
+  document.getElementById('alerta-dia-content').innerHTML = `
+    <div class="modal-header">
+      <h3>🔔 Alertas pendientes</h3>
+      <button class="modal-close" onclick="document.getElementById('alerta-dia-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      ${vencidas.length > 0 ? `
+        <div style="margin-bottom:16px">
+          <div style="font-size:13px;font-weight:700;color:#EF4444;margin-bottom:8px">⚠️ Vencidas (${vencidas.length})</div>
+          ${vencidas.map(a => `
+            <div class="alerta-dia-item urgente">
+              <div class="alert-type-badge" style="background:#FEE2E2;color:#EF4444">${a.tipo}</div>
+              <div>
+                <div style="font-size:14px;font-weight:600">${a.desc}</div>
+                <div style="font-size:12px;color:var(--text2)">${a.clienteNombre} · ${a.fecha}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      ${alertasHoy.length > 0 ? `
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--secondary);margin-bottom:8px">📅 Hoy (${alertasHoy.length})</div>
+          ${alertasHoy.map(a => `
+            <div class="alerta-dia-item">
+              <div class="alert-type-badge">${a.tipo}</div>
+              <div>
+                <div style="font-size:14px;font-weight:600">${a.desc}</div>
+                <div style="font-size:12px;color:var(--text2)">${a.clienteNombre}${a.hora?' · '+a.hora:''}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="document.getElementById('alerta-dia-overlay').classList.remove('open')">Cerrar</button>
+      <button class="btn-primary" style="width:auto" onclick="document.getElementById('alerta-dia-overlay').classList.remove('open');navigateTo('alertas')">Ver todas</button>
+    </div>
+  `;
+  overlay.classList.add('open');
+}
+
+function renderAlertas() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const todas = getTodasAlertas().sort((a,b) => a.fecha.localeCompare(b.fecha));
+  const vencidas = todas.filter(a => a.estado==='Pendiente' && a.fecha < hoy);
+  const hoyAl = todas.filter(a => a.estado==='Pendiente' && a.fecha === hoy);
+  const futuras = todas.filter(a => a.estado==='Pendiente' && a.fecha > hoy);
+  const completadas = todas.filter(a => a.estado==='Completada');
+
+  function renderGrupo(alertas, titulo, color) {
+    if (alertas.length === 0) return '';
+    return `
+      <div style="margin-bottom:24px">
+        <h3 style="font-size:14px;font-weight:700;color:${color};margin-bottom:12px">${titulo} (${alertas.length})</h3>
+        ${alertas.map(a => `
+          <div class="alerts-page-item ${a.fecha < hoy && a.estado==='Pendiente'?'vencida':''}  ${a.fecha===hoy?'hoy':''}">
+            <div class="alert-type-badge">${a.tipo}</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:600">${a.desc}</div>
+              <div style="font-size:12px;color:var(--text2);margin-top:2px">
+                <span style="cursor:pointer;text-decoration:underline" onclick="openClienteDetail('${a.clienteId}')">${a.clienteNombre}</span>
+                · ${a.fecha}${a.hora?' · '+a.hora:''}
+              </div>
+            </div>
+            ${a.estado==='Pendiente' ? `<button class="btn-green btn-sm" onclick="completarAlertaGlobal('${a.clienteId}','${a.id}')">✓ Completar</button>` : '<span style="font-size:12px;color:var(--accent)">✓ Completada</span>'}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  document.getElementById('page-alertas').innerHTML = `
+    ${vencidas.length===0&&hoyAl.length===0&&futuras.length===0&&completadas.length===0 ?
+      `<div class="empty-state"><div class="empty-icon">🎉</div><h3>¡Todo al día!</h3><p>No tienes alertas pendientes</p></div>` : ''}
+    ${renderGrupo(vencidas, '⚠️ Vencidas', '#EF4444')}
+    ${renderGrupo(hoyAl, '📅 Hoy', 'var(--secondary)')}
+    ${renderGrupo(futuras, '🗓️ Próximas', 'var(--primary)')}
+    ${completadas.length > 0 ? `<details style="margin-top:8px"><summary style="cursor:pointer;font-size:14px;color:var(--text2);padding:8px 0">Ver completadas (${completadas.length})</summary><div style="margin-top:8px">${renderGrupo(completadas,'✅ Completadas','var(--accent)')}</div></details>` : ''}
+  `;
+}
+
+function completarAlertaGlobal(clienteId, alertaId) {
+  const c = db.clientes.find(x => x.id === clienteId);
+  const a = c.alertas.find(x => x.id === alertaId);
+  if (a) { a.estado = 'Completada'; saveDB(db); updateAlertasBadge(); renderAlertas(); showToast('Alerta completada ✓', 'success'); }
+}
+
+// ================= ADMIN =================
+function renderAdmin() {
+  if (currentUser.role !== 'admin') {
+    document.getElementById('page-admin').innerHTML = '<div class="empty-state"><div class="empty-icon">🔒</div><h3>Acceso restringido</h3></div>';
+    return;
+  }
+
+  const jefes = db.users.filter(u => u.role === 'jefe');
+  const empleados = db.users.filter(u => u.role === 'empleado');
+  const codigos = db.codigos;
+
+  document.getElementById('page-admin').innerHTML = `
+    <div style="display:grid;gap:24px">
+
+      <!-- Usuarios -->
+      <div class="card">
+        <h3>👥 Jefes (${jefes.length})</h3>
+        <div class="admin-grid">
+          ${jefes.map(u => `
+            <div class="user-card">
+              <div class="user-card-header">
+                <div class="user-card-avatar">${u.name.charAt(0)}</div>
+                <div>
+                  <div style="font-weight:700;font-size:15px">${u.name}</div>
+                  <div style="font-size:12px;color:var(--text2)">${u.email}</div>
+                </div>
+                <span class="role-badge role-jefe" style="margin-left:auto">Jefe</span>
+              </div>
+              <div style="font-size:12px;color:var(--text2)">
+                Empleados: ${db.users.filter(e=>e.jefe_id===u.id).length} · 
+                Clientes: ${db.clientes.filter(c=>c.empleado_id===u.id || db.users.filter(e=>e.jefe_id===u.id).map(e=>e.id).includes(c.empleado_id)).length}
+              </div>
+              <div style="margin-top:10px;display:flex;gap:8px">
+                <button class="btn-danger" onclick="toggleUserActivo('${u.id}')">${u.activo?'Desactivar':'Activar'}</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>👤 Empleados (${empleados.length})</h3>
+        <div class="admin-grid">
+          ${empleados.map(u => {
+            const jefe = db.users.find(j => j.id === u.jefe_id);
+            return `
+            <div class="user-card">
+              <div class="user-card-header">
+                <div class="user-card-avatar">${u.name.charAt(0)}</div>
+                <div>
+                  <div style="font-weight:700;font-size:15px">${u.name}</div>
+                  <div style="font-size:12px;color:var(--text2)">${u.email}</div>
+                </div>
+                <span class="role-badge role-empleado" style="margin-left:auto">Emp.</span>
+              </div>
+              <div style="font-size:12px;color:var(--text2)">
+                Jefe: ${jefe?jefe.name:'Sin asignar'} · 
+                Clientes: ${db.clientes.filter(c=>c.empleado_id===u.id).length}
+              </div>
+              <div style="margin-top:10px;display:flex;gap:8px">
+                <button class="btn-danger" onclick="toggleUserActivo('${u.id}')">${u.activo?'Desactivar':'Activar'}</button>
+                <button class="btn-sm btn-secondary" style="font-size:12px" onclick="openReasignarJefe('${u.id}')">Cambiar jefe</button>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Códigos de invitación -->
+      <div class="card">
+        <h3 style="margin-bottom:16px">🎟️ Códigos de invitación</h3>
+        <div style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-green btn-sm" onclick="generarCodigo('jefe',null)">➕ Código para Jefe</button>
+          ${jefes.map(j => `<button class="btn-sm btn-secondary" onclick="generarCodigo('empleado','${j.id}')">➕ Emp. para ${j.name.split(' ')[0]}</button>`).join('')}
+        </div>
+        <table class="clients-table">
+          <thead><tr><th>Código</th><th>Rol</th><th>Jefe asignado</th><th>Estado</th><th>Acción</th></tr></thead>
+          <tbody>
+            ${codigos.length===0 ? '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px">Sin códigos generados</td></tr>' :
+              codigos.map(cod => {
+                const jefe = db.users.find(u=>u.id===cod.jefe_id);
+                return `<tr>
+                  <td><span class="code-badge" onclick="copiarCodigo('${cod.code}')">${cod.code}</span></td>
+                  <td><span class="role-badge ${cod.role==='jefe'?'role-jefe':'role-empleado'}">${cod.role==='jefe'?'Jefe':'Empleado'}</span></td>
+                  <td style="font-size:13px">${jefe?jefe.name:'-'}</td>
+                  <td>${cod.usado ? '<span style="color:var(--accent);font-size:12px">✓ Usado</span>' : '<span style="color:var(--secondary);font-size:12px">⏳ Pendiente</span>'}</td>
+                  <td>${!cod.usado ? `<button class="btn-danger" onclick="eliminarCodigo('${cod.code}')">Eliminar</button>` : ''}</td>
+                </tr>`;
+              }).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Exportar -->
+      <div class="card">
+        <h3>💾 Backup y exportación</h3>
+        <p style="font-size:14px;color:var(--text2);margin-bottom:16px">Exporta el CRM completo con todos los datos para hacer backup o compartirlo.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn-primary" style="width:auto" onclick="exportarCRM()">⬇️ Exportar CRM completo</button>
+          <button class="btn-secondary" onclick="importarCRM()">⬆️ Importar backup</button>
+          <input type="file" id="import-file" class="hidden" accept=".html" onchange="processImport(this)">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleUserActivo(id) {
+  const u = db.users.find(x => x.id === id);
+  if (u.id === currentUser.id) { showToast('No puedes desactivarte a ti mismo', 'error'); return; }
+  u.activo = !u.activo;
+  saveDB(db);
+  showToast(`Usuario ${u.activo?'activado':'desactivado'}`, 'success');
+  renderAdmin();
+}
+
+function openReasignarJefe(empId) {
+  const jefes = db.users.filter(u => u.role === 'jefe');
+  const emp = db.users.find(u => u.id === empId);
+  openModal('Cambiar jefe asignado', `
+    <div class="form-group">
+      <label>Empleado: <strong>${emp.name}</strong></label>
+      <select id="nuevo-jefe-id">
+        <option value="">Sin jefe asignado</option>
+        ${jefes.map(j => `<option value="${j.id}" ${emp.jefe_id===j.id?'selected':''}>${j.name}</option>`).join('')}
+      </select>
+    </div>
+  `, `
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" style="width:auto" onclick="saveReasignarJefe('${empId}')">Guardar</button>
+  `);
+}
+
+function saveReasignarJefe(empId) {
+  const emp = db.users.find(u => u.id === empId);
+  emp.jefe_id = document.getElementById('nuevo-jefe-id').value || null;
+  saveDB(db);
+  closeModal();
+  showToast('Jefe actualizado', 'success');
+  renderAdmin();
+}
+
+function generarCodigo(role, jefeId) {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  db.codigos.push({ code, role, jefe_id: jefeId, usado: false, creado: new Date().toISOString() });
+  saveDB(db);
+  showToast(`Código generado: ${code}`, 'success');
+  renderAdmin();
+}
+
+function eliminarCodigo(code) {
+  db.codigos = db.codigos.filter(c => c.code !== code);
+  saveDB(db);
+  renderAdmin();
+}
+
+function copiarCodigo(code) {
+  navigator.clipboard.writeText(code).then(() => showToast('Código copiado: ' + code, 'success'));
+}
+
+// ================= PERFIL USUARIO =================
+function openMiPerfil() {
+  const u = currentUser;
+  openModal('Mi perfil', `
+    <div style="text-align:center;margin-bottom:24px">
+      <div id="perfil-avatar-preview" style="width:80px;height:80px;border-radius:50%;background:#FF6B35;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;font-weight:700;color:white;overflow:hidden;cursor:pointer" onclick="document.getElementById('perfil-foto-input').click()">
+        ${u.foto ? `<img src="${u.foto}" style="width:100%;height:100%;object-fit:cover">` : u.name.charAt(0).toUpperCase()}
+      </div>
+      <input type="file" id="perfil-foto-input" accept="image/*" class="hidden" onchange="previewFoto(this)">
+      <div style="font-size:12px;color:var(--text3)">Toca el avatar para cambiar foto</div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nombre completo</label>
+        <input id="perfil-nombre" value="${u.name}">
+      </div>
+      <div class="form-group full">
+        <label>Email</label>
+        <input id="perfil-email" value="${u.email}" type="email">
+      </div>
+      <div class="form-group full">
+        <label>Nueva contraseña (dejar vacío para no cambiar)</label>
+        <input id="perfil-pass" type="password" placeholder="Nueva contraseña...">
+      </div>
+      ${u.role === 'jefe' ? `
+      <div class="form-group full">
+        <label>🗂️ URL carpeta raíz Google Drive</label>
+        <input id="perfil-drive" value="${u.drive_url||''}" placeholder="https://drive.google.com/drive/folders/...">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">Referencia para que tus empleados sepan dónde subir documentación</div>
+      </div>` : ''}
+    </div>
+  `, `
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" style="width:auto" onclick="saveMiPerfil()">Guardar cambios</button>
+  `);
+}
+
+function previewFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = document.getElementById('perfil-avatar-preview');
+    preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+    preview.dataset.foto = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveMiPerfil() {
+  const nombre = document.getElementById('perfil-nombre').value.trim();
+  const email = document.getElementById('perfil-email').value.trim();
+  const pass = document.getElementById('perfil-pass').value;
+  if (!nombre || !email) { showToast('Nombre y email son obligatorios', 'error'); return; }
+
+  const u = db.users.find(x => x.id === currentUser.id);
+  u.name = nombre;
+  u.email = email;
+  if (pass) u.password = pass;
+
+  const preview = document.getElementById('perfil-avatar-preview');
+  if (preview.dataset.foto) u.foto = preview.dataset.foto;
+
+  const driveEl = document.getElementById('perfil-drive');
+  if (driveEl) u.drive_url = driveEl.value.trim();
+
+  currentUser = u;
+  saveDB(db);
+
+  // Update sidebar
+  document.getElementById('sidebar-avatar').innerHTML = u.foto
+    ? `<img src="${u.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+    : u.name.charAt(0).toUpperCase();
+  document.getElementById('sidebar-name').textContent = u.name;
+
+  closeModal();
+  showToast('Perfil actualizado', 'success');
+}
+
+// ================= ALERTA GLOBAL =================
+function openNuevaAlertaGlobal() {
+  const clientes = getClientesVisibles();
+  const hoy = new Date().toISOString().split('T')[0];
+
+  openModal('Nueva alerta', `
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Cliente *</label>
+        <select id="ag-cliente">
+          <option value="">— Selecciona un cliente —</option>
+          ${clientes.map(c => `<option value="${c.id}">${c.nombre}${c.cups?' ('+c.cups+')':''}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo de alerta</label>
+        <select id="ag-tipo">
+          <option>Llamada</option><option>Reunión</option><option>Email</option><option>Tarea</option><option>Renovación</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fecha *</label>
+        <input id="ag-fecha" type="date" value="${hoy}">
+      </div>
+      <div class="form-group">
+        <label>Hora (opcional)</label>
+        <input id="ag-hora" type="time">
+      </div>
+      <div class="form-group full">
+        <label>Descripción *</label>
+        <textarea id="ag-desc" placeholder="¿Qué hay que hacer?"></textarea>
+      </div>
+    </div>
+  `, `
+    <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button class="btn-primary" style="width:auto" onclick="saveAlertaGlobal()">Crear alerta</button>
+  `);
+}
+
+function saveAlertaGlobal() {
+  const clienteId = document.getElementById('ag-cliente').value;
+  const desc = document.getElementById('ag-desc').value.trim();
+  const fecha = document.getElementById('ag-fecha').value;
+  if (!clienteId) { showToast('Selecciona un cliente', 'error'); return; }
+  if (!desc || !fecha) { showToast('Rellena descripción y fecha', 'error'); return; }
+
+  const c = db.clientes.find(x => x.id === clienteId);
+  c.alertas.push({
+    id: 'a'+Date.now(),
+    tipo: document.getElementById('ag-tipo').value,
+    fecha,
+    hora: document.getElementById('ag-hora').value,
+    desc,
+    estado: 'Pendiente'
+  });
+  saveDB(db);
+  updateAlertasBadge();
+  closeModal();
+  showToast('Alerta creada para ' + c.nombre, 'success');
+  if (currentPage === 'alertas') renderAlertas();
+}
+
+
+function exportarCRM() {
+  const data = JSON.stringify(db);
+  const blob = new Blob([document.documentElement.outerHTML.replace(
+    '<script>',
+    `<script>localStorage.setItem('${DB_KEY}', ${JSON.stringify(JSON.stringify(db))});\n`
+  )], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `EnergyPro_backup_${new Date().toISOString().split('T')[0]}.html`;
+  a.click();
+  showToast('CRM exportado correctamente', 'success');
+}
+
+function importarCRM() {
+  document.getElementById('import-file').click();
+}
+
+function processImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const match = e.target.result.match(/localStorage\.setItem\('energypro_v1',\s*(.+?)\);\n/);
+      if (match) {
+        const data = JSON.parse(JSON.parse(match[1]));
+        db = data;
+        saveDB(db);
+        showToast('Backup importado correctamente', 'success');
+        renderAdmin();
+      } else {
+        showToast('Archivo no válido', 'error');
+      }
+    } catch(err) {
+      showToast('Error al importar', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ================= MODAL =================
+function openModal(title, body, footer, noFooterPad) {
+  const overlay = document.getElementById('modal-overlay');
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <h3>${title}</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body-inner">${body}</div>
+    ${footer ? `<div class="modal-footer">${footer}</div>` : ''}
+  `;
+  overlay.classList.add('open');
+  document.getElementById('modal-content').classList.remove('detail-modal');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function closeModalOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ================= HELPERS =================
+function renderEstadoSelector(currentEstado, clienteId) {
+  const estados = [
+    { val: 'Factura recibida',  cls: 'ef',  icon: '🧾' },
+    { val: 'Propuesta enviada', cls: 'ep',  icon: '📨' },
+    { val: 'Cerrado ganado',    cls: 'eg',  icon: '✅' },
+    { val: 'Cerrado perdido',   cls: 'epe', icon: '❌' },
+    { val: 'Ahorro',            cls: 'ea',  icon: '💚' },
+    { val: 'Comisión',          cls: 'ec',  icon: '💰' },
+  ];
+  return `
+    <div class="estado-selector">
+      ${estados.map(e => `
+        <button class="estado-btn ${e.cls} ${currentEstado === e.val ? 'selected' : ''}"
+          onclick="cambiarEstadoCliente('${clienteId}', '${e.val}', this)">
+          ${e.icon} ${e.val}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function cambiarEstadoCliente(clienteId, nuevoEstado, btn) {
+  const c = db.clientes.find(x => x.id === clienteId);
+  if (!c) return;
+  c.estado = nuevoEstado;
+  saveDB(db);
+
+  // Update all buttons in selector
+  btn.closest('.estado-selector').querySelectorAll('.estado-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  // Refresh ganado section if needed
+  const ganadoWrap = document.getElementById('ganado-section-wrap');
+  if (ganadoWrap) {
+    ganadoWrap.style.display = nuevoEstado === 'Cerrado ganado' ? 'block' : 'none';
+  }
+
+  showToast(`Estado → ${nuevoEstado}`, 'success');
+  if (currentPage === 'clientes') renderClientes();
+  if (currentPage === 'dashboard') renderDashboard();
+}
+
+
+function estadoBadge(estado) {
+  const map = {
+    'Factura recibida': 'factura',
+    'Propuesta enviada': 'propuesta',
+    'Cerrado ganado': 'ganado',
+    'Cerrado perdido': 'perdido',
+    'Ahorro': 'ahorro',
+    'Comisión': 'comision'
+  };
+  const icons = {
+    'Factura recibida': '🧾',
+    'Propuesta enviada': '📨',
+    'Cerrado ganado': '✅',
+    'Cerrado perdido': '❌',
+    'Ahorro': '💚',
+    'Comisión': '💰'
+  };
+  const cls = map[estado] || 'factura';
+  return `<span class="estado-badge estado-${cls}">${icons[estado]||''} ${estado}</span>`;
+}
+
+function suministroBadge(tipo) {
+  const map = { 'Luz': 'sum-luz', 'Gas': 'sum-gas', 'Ambos': 'sum-ambos' };
+  const icons = { 'Luz': '⚡', 'Gas': '🔥', 'Ambos': '⚡🔥' };
+  return `<span class="suministro-badge ${map[tipo]||'sum-luz'}">${icons[tipo]||''} ${tipo}</span>`;
+}
+
+function formatDate(iso) {
+  if (!iso) return '-';
+  return new Date(iso).toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function formatDateTime(iso) {
+  if (!iso) return '-';
+  return new Date(iso).toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3200);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  db = loadDB();
+});
+</script>
+</body>
+</html>
